@@ -12,7 +12,7 @@ type IData<T> = {
   data?:T;
 };
 
-const sendResponse =<T> (res: Response, data: IData<T>) => {
+const sendResponse = <T> (res: Response, data: IData<T>) => {
   const apiResponse:IData<T>={
     statusCode:data.statusCode,
     success: data.success,

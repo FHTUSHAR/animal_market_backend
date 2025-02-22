@@ -18,4 +18,20 @@ const userSchema = z.object({
   }),
 });
 
-export const UserValidation = { userSchema };
+const updateUserSchema = z.object({
+  body: z.object({
+    name: z.object({
+      firstName: z.string().optional(),
+      middleName: z.string().optional(),
+      lastName: z.string().optional(),
+    }).optional(),
+    role: z.enum(["buyer", "seller"]).optional(),
+    phoneNumber: z.string().optional(),
+    password: z.string().optional(),
+    address: z.string().optional(),
+    budget: z.number().optional(),
+    income: z.number().optional(),
+  }),
+});
+
+export const UserValidation = { userSchema, updateUserSchema };
