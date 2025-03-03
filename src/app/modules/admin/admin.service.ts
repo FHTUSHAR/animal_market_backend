@@ -1,19 +1,19 @@
 import { SortOrder } from "mongoose";
 import { PaginationHelper } from "../../../helpers/paginationHelper";
 import { IGenericResponse, IPaginationOptions } from "../../../interfaces/common";
-import { userSearchAbleFields } from "./user.constant";
-import { IUser } from "./user.interface";
-import { User } from "./user.model";
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
+import { Admin } from "./admin.model";
+import { IAdmin } from "./admin.interface";
+import { adminSearchAbleFields } from "./admin.constant";
 
 
-const createUser = async (user: IUser):Promise<IUser> => { 
-  const newUser = await User.create(user);
+const createAdmin = async (user: IAdmin):Promise<any> => { 
+  const newUser = await Admin.create(user);
   return newUser;   
 };
 
-const getAllUsers = async (
+const getAllAdmins = async (
     filters: any,
     paginationOptions: IPaginationOptions
   ): Promise<IGenericResponse<any>> => {
@@ -22,7 +22,7 @@ const getAllUsers = async (
     const andConditions: any = [];
     if (searchTerm) {
       andConditions.push({
-        $or: userSearchAbleFields.map((field) => ({
+        $or: adminSearchAbleFields.map((field) => ({
           [field]: {
             $regex: searchTerm,
             $options: "i",
@@ -52,11 +52,11 @@ const getAllUsers = async (
       filter = {};
     }
   
-    const result = await User.find(filter)
+    const result = await Admin.find(filter)
       .sort(sortCondition)
       .skip(skip)
       .limit(limit);
-    const total = await User.countDocuments(filter);
+    const total = await Admin.countDocuments(filter);
     return {
       meta: {
         page,
@@ -67,18 +67,18 @@ const getAllUsers = async (
     };
   };
   
-  const getSingleUser = async (
+  const getSingleAdmin = async (
     id: string
-  ): Promise<IUser | null> => {
-    const result = await User.findById(id)
+  ): Promise<IAdmin | null> => {
+    const result = await Admin.findById(id)
     return result;
   };
   
-  const updateUser = async (
+  const updateAdmin = async (
     id: string,
-    payload:Partial<IUser>
-  ):Promise<IUser | null> => {
-    const isExit = await User.findById(id);
+    payload:Partial<IAdmin>
+  ):Promise<IAdmin | null> => {
+    const isExit = await Admin.findById(id);
     if(!isExit){
       throw new ApiError(httpStatus.NOT_FOUND,'User not exit')
     }
@@ -94,15 +94,15 @@ const getAllUsers = async (
   
     const filter = {_id:id };
     const options={new:true}
-    const result = await User.findOneAndUpdate(filter,updatedUserData,options);
+    const result = await Admin.findOneAndUpdate(filter,updatedUserData,options);
     return result;
   };
   
-  const deleteUser = async (
+  const deleteAdmin = async (
       id: string,
     ) => {
-      const result = await User.findByIdAndDelete(id);
+      const result = await Admin.findByIdAndDelete(id);
       return result;
     };
 
-export const UserService = {createUser, deleteUser, updateUser, getSingleUser, getAllUsers }
+export const AdminService = {createAdmin, deleteAdmin, updateAdmin, getSingleAdmin, getAllAdmins }

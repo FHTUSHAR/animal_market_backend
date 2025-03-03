@@ -11,6 +11,12 @@ const AnimalSchema = new Schema<IAnimal>({
   label: { type: String, enum: ["for sale", "sold"], required: true },
   category: { type: String, enum: ["Dairy", "Beef"], required: true },
   seller: { type: Schema.Types.ObjectId, ref: "User" },
+},
+{
+  timestamps: true,
+  toJSON:{
+      virtuals:true
+  } 
 });
 
 export const Animal = model<IAnimal, AnimalModel>("Animal", AnimalSchema);
